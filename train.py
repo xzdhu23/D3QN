@@ -4,8 +4,6 @@ import numpy as np
 import argparse
 from utils import create_directory, plot_learning_curve
 from D3QN import D3QN
-envpath = '/home/xgq/conda/envs/pytorch1.6/lib/python3.6/site-packages/cv2/qt/plugins/platforms'
-os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = envpath
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--max_episodes', type=int, default=500)
@@ -27,10 +25,10 @@ def main():
     for episode in range(args.max_episodes):
         total_reward = 0
         done = False
-        observation = env.reset()
+        observation = env.reset()[0]
         while not done:
             action = agent.choose_action(observation, isTrain=True)
-            observation_, reward, done, info = env.step(action)
+            observation_, reward, done, _, info = env.step(action)
             agent.remember(observation, action, reward, observation_, done)
             agent.learn()
             total_reward += reward
